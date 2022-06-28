@@ -1,8 +1,11 @@
 ﻿
 #include <iostream>
+#include"Test.h"
 
 int main()
 {
-    std::cout << "Hello World!\n";
+    Test tst;
+    tst.ReadFromFile("questions.tst");
+    tst.Show();
 }
 

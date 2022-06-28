@@ -6,8 +6,8 @@
 class TestQuestion
 {
 	std::vector<std::string> m_text; // [0] - question, [>0] - answers
-	std::vector<int> m_usrAnsw; // index of user answer
-	std::vector<int> m_crctAnsw; // correct answers
+	std::vector<int> m_usrAnsw; // indexes of user answers
+	std::vector<int> m_crctAnsw; // indexes of correct answers
 	int m_points;
 public:
 
@@ -25,6 +25,7 @@ public:
 	TestQuestion& EditQstn(std::string q)
 	{
 		m_text[0] = q;
+		return *this;
 	}
 
 	TestQuestion& AddAnswr(std::string a, bool crct)
@@ -33,13 +34,52 @@ public:
 			m_text.push_back(a);
 		if (crct)
 			m_crctAnsw.push_back(m_text.size() - 1);
+		return *this;
 	}
 
 	TestQuestion& SetPoints(int p)
 	{
 		m_points = p;
+		return *this;
 	}
 
+	int GetPoints()
+	{
+		return m_points;
+	}
+
+	TestQuestion& Show(bool teacherMode = false)
+	{
+		std::cout << "\nQuestion: " << m_text[0];
+		size_t ci = 0;
+		for (size_t i = 1; i < m_text.size(); i++)
+		{
+			std::cout << "\n" << i << ".";
+			if (teacherMode)
+			{
+
+				if (ci < m_crctAnsw.size() && i == m_crctAnsw[ci])//Error!!!
+				{
+					std::cout << "Correct";
+					ci++;
+				}
+				else
+					std::cout << "Incorrect";
+				std::cout << " answer: ";
+			}
+			std::cout << m_text[i];
+		}
+		if (teacherMode)
+			std::cout << "\nPoints: " << m_points;
+		return *this;
+	}
+
+	TestQuestion& Clear()
+	{
+		TestQuestion t;
+		*this = t;
+		return *this;
+	}
 	double Check()
 	{
 		int caCount = 0;
