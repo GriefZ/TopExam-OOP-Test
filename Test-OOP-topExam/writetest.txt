@@ -1,0 +1,45 @@
+<QUESTION>
+2+2=
+<ANSWERS>
+3-
+5-
+4+
+1-
+<POINTS>
+3
+<QUESTION>
+2+7=
+<ANSWERS>
+3-
+5-
+6-
+9+
+<POINTS>
+3
+<QUESTION>
+Dog or Cat=
+<ANSWERS>
+Dog+
+Cow-
+Cat+
+Ship-
+<POINTS>
+7
+<QUESTION>
+4*71=
+<ANSWERS>
+284+
+384-
+404-
+711-
+<POINTS>
+3
+<QUESTION>
+Это Русский
+<ANSWERS>
+Да+
+Нет-
+Maybe-
+it's something ureadable!-
+<POINTS>
+3

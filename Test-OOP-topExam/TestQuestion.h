@@ -1,6 +1,5 @@
 #pragma once
 #include <iostream>
-#include <fstream>
 #include <vector>
 #include <string>
 class TestQuestion
@@ -47,10 +46,20 @@ public:
 	{
 		return m_points;
 	}
+	
+	std::vector<std::string> GetQst()
+	{
+		return m_text;
+	}
+
+	std::vector<int> GetCrctAnsw()
+	{
+		return m_crctAnsw;
+	}
 
 	TestQuestion& Show(bool teacherMode = false)
 	{
-		std::cout << "\nQuestion: " << m_text[0];
+		std::cout << m_text[0];
 		size_t ci = 0;
 		for (size_t i = 1; i < m_text.size(); i++)
 		{
@@ -71,24 +80,57 @@ public:
 		}
 		if (teacherMode)
 			std::cout << "\nPoints: " << m_points;
+		std::cout << std::endl;
 		return *this;
 	}
 
 	TestQuestion& Clear()
 	{
-		TestQuestion t;
-		*this = t;
+		m_text.clear();
+		m_text.push_back("Empty");
+		m_usrAnsw.clear();
+		m_crctAnsw.clear();
+		m_points = 0;
 		return *this;
 	}
+
+	TestQuestion& PassQst()
+	{
+		Show();
+		bool isOk = false;
+		do
+		{
+			std::string usrAnsw;
+			std::cout << "\tEnter number of answer -> ";
+			std::getline(std::cin, usrAnsw);
+			std::string tmp;
+			for (size_t i = 0; i < usrAnsw.length() + 1; i++)
+			{
+				if (usrAnsw[i] > 47 && usrAnsw[i] < 58)
+					tmp += usrAnsw[i];
+				if ((usrAnsw[i] == 44 || usrAnsw[i] == '\0') && !tmp.empty())
+				{
+					m_usrAnsw.push_back(std::stoi(tmp));
+					tmp.clear();
+				}
+			}
+			if (m_usrAnsw.size() == m_crctAnsw.size())
+				isOk = true;
+			else
+				m_usrAnsw.clear();
+		} while (!isOk);
+		return *this;
+	}
+
 	double Check()
 	{
 		int caCount = 0;
-		for (size_t i = 0; i < m_crctAnsw.size(); i++)
-			for (size_t k = 0; k < m_usrAnsw.size(); k)
-				if (m_usrAnsw[k] == m_crctAnsw[i])
+		for (size_t i = caCount; i < m_usrAnsw.size(); i++)
+			for (size_t k = 0; k < m_crctAnsw.size(); k++)
+				if (m_usrAnsw[i] == m_crctAnsw[k])
 					caCount++;
 
-		return (double)m_points / caCount;
+		return (caCount != 0) ? m_points * ((double)caCount / m_crctAnsw.size()) : 0;
 	}
 
 };

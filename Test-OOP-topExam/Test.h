@@ -1,4 +1,5 @@
 #pragma once
+#include <fstream>
 #include <algorithm>
 #include "TestQuestion.h"
 
@@ -7,6 +8,8 @@ class Test
 	std::vector<TestQuestion> m_questions;
 	int m_maxPoints;
 	bool m_adminMode = true;//Убрать потом
+	bool m_passed = false;
+	std::string m_student;
 
 public:
 
@@ -44,7 +47,9 @@ public:
 
 	Test() :
 		m_questions{ std::vector<TestQuestion>() },
-		m_maxPoints{ 0 }
+		m_maxPoints{ 0 },
+		m_passed{false},
+		m_student{"none"}
 	{}
 
 	Test& InputQstn()
@@ -143,16 +148,99 @@ public:
 				}
 			}
 			f.close();
+			size_t qstCount = m_questions.size();
+			for (size_t i = 0; i < qstCount; i++)
+			{
+				m_maxPoints += m_questions[i].GetPoints();
+			}
 		}
 		else
 			std::cout << "\nCan't load file!";
 		return *this;
 	}
 
+	Test& WriteToFile(std::string fileName)
+	{
+		std::ofstream f;
+		f.open(fileName);
+		if (f.is_open())
+		{
+			size_t qstCount = m_questions.size();
+			std::string tmp;
+			for (size_t i = 0; i < qstCount; i++)
+			{
+				std::vector<std::string> qst = m_questions[i].GetQst();
+				int qCount = qst.size();
+				std::vector<int> crAnsws = m_questions[i].GetCrctAnsw();
+				int crCount = crAnsws.size();
+				f << "<QUESTION>" << std::endl;
+				tmp = qst[0];
+				std::for_each(tmp.begin(), tmp.end(), Cir866to1251());
+				f << tmp << std::endl;
+
+				f << "<ANSWERS>" << std::endl;
+				for (size_t i = 1; i < qCount; i++)
+				{
+					tmp = qst[i];
+					std::for_each(tmp.begin(), tmp.end(), Cir866to1251());
+					f << tmp;
+					bool crct = false;
+					for (size_t k = 0; k < crCount; k++)
+					{
+						if (crAnsws[k] == i)
+							crct = true;
+					}
+					if (crct)
+						f << "+";
+					else
+						f << "-";
+					f << std::endl;
+				}
+				f << "<POINTS>" << std::endl;
+				f << m_questions[i].GetPoints() << std::endl;
+			}
+		}
+		else
+		{
+			std::cout << "\n\tError! Can't write to file!";
+		}
+		return *this;
+	}
+
+	Test& PassTst()
+	{
+		std::string tmp;
+		std::cout << "\tWelcome to  test!\n";
+		std::cout << "\tInput your name: ";
+		std::getline(std::cin, m_student);
+		size_t qstCount = m_questions.size();
+		for (size_t i = 0; i < qstCount; i++)
+		{
+			std::cout << "\nQuestion " << i + 1 << "/" << qstCount << " : ";
+			m_questions[i].PassQst();
+		}
+		return *this;
+	}
+
+	Test& ResultDisplay()
+	{
+		double res = 0;
+		size_t qstCount = m_questions.size();
+		for (size_t i = 0; i < qstCount; i++)
+		{
+			res += m_questions[i].Check();
+		}
+		std::cout.precision(4);
+		std::cout << "\nYour score is " << res << "/" << m_maxPoints << "(" << res / (m_maxPoints / 100.0) << "%)." << std::endl;
+		return *this;
+	}
+
 	void Show()
 	{
-		for (size_t i = 0; i < m_questions.size(); i++)
+		size_t qstCount = m_questions.size();
+		for (size_t i = 0; i < qstCount; i++)
 		{
+			std::cout << "\nQuestion " << i + 1 << "/" << qstCount << ": ";
 			m_questions[i].Show(m_adminMode);
 		}
 	}

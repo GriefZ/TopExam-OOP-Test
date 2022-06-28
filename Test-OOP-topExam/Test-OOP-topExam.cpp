@@ -6,6 +6,9 @@ int main()
 {
     Test tst;
     tst.ReadFromFile("questions.tst");
-    tst.Show();
+    tst.WriteToFile("writetest.txt");
+    //tst.PassTst();
+    //tst.ResultDisplay();
+    //tst.Show();
 }
 
