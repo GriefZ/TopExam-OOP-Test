@@ -209,15 +209,22 @@ public:
 
 	Test& PassTst()
 	{
-		std::string tmp;
-		std::cout << "\tWelcome to  test!\n";
-		std::cout << "\tInput your name: ";
-		std::getline(std::cin, m_student);
-		size_t qstCount = m_questions.size();
-		for (size_t i = 0; i < qstCount; i++)
+		if (!m_passed)
 		{
-			std::cout << "\nQuestion " << i + 1 << "/" << qstCount << " : ";
-			m_questions[i].PassQst();
+			std::string tmp;
+			std::cout << "\tWelcome to  test!\n";
+			std::cout << "\tInput your name: ";
+			std::getline(std::cin, m_student);
+			size_t qstCount = m_questions.size();
+			for (size_t i = 0; i < qstCount; i++)
+			{
+				std::cout << "\nQuestion " << i + 1 << "/" << qstCount << " : ";
+				m_questions[i].PassQst();
+			}
+		}
+		else
+		{
+			std::cout << "\nTest is already passed!.";
 		}
 		return *this;
 	}
@@ -237,12 +244,20 @@ public:
 
 	void Show()
 	{
-		size_t qstCount = m_questions.size();
-		for (size_t i = 0; i < qstCount; i++)
+		if (m_passed)
 		{
-			std::cout << "\nQuestion " << i + 1 << "/" << qstCount << ": ";
-			m_questions[i].Show(m_adminMode);
+			size_t qstCount = m_questions.size();
+			for (size_t i = 0; i < qstCount; i++)
+			{
+				std::cout << "\nQuestion " << i + 1 << "/" << qstCount << ": ";
+				m_questions[i].Show(m_adminMode);
+			}
 		}
+		else
+		{
+			std::cout << "\nTest is not passed yet!";
+		}
+		
 	}
 };
 
