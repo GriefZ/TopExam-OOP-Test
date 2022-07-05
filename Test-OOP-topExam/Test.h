@@ -98,6 +98,7 @@ public:
 		} while (tempStr != "y");
 		m_questions.push_back(tempQstn);
 		m_maxPoints += tempQstn.GetPoints();
+		return *this;
 	}
 
 	Test& ReadFromFile(std::string fileName)
@@ -153,6 +154,9 @@ public:
 			{
 				m_maxPoints += m_questions[i].GetPoints();
 			}
+			m_passed = false;
+			m_student = "none";
+			std::cout << "\nTest is loaded!";
 		}
 		else
 			std::cout << "\nCan't load file!";
@@ -170,9 +174,9 @@ public:
 			for (size_t i = 0; i < qstCount; i++)
 			{
 				std::vector<std::string> qst = m_questions[i].GetQst();
-				int qCount = qst.size();
+				size_t qCount = qst.size();
 				std::vector<int> crAnsws = m_questions[i].GetCrctAnsw();
-				int crCount = crAnsws.size();
+				size_t crCount = crAnsws.size();
 				f << "<QUESTION>" << std::endl;
 				tmp = qst[0];
 				std::for_each(tmp.begin(), tmp.end(), Cir866to1251());
@@ -209,7 +213,7 @@ public:
 
 	Test& PassTst()
 	{
-		if (!m_passed)
+		if (!m_passed && !Empty())
 		{
 			std::string tmp;
 			std::cout << "\tWelcome to  test!\n";
@@ -221,10 +225,13 @@ public:
 				std::cout << "\nQuestion " << i + 1 << "/" << qstCount << " : ";
 				m_questions[i].PassQst();
 			}
+			m_passed = true;
 		}
+		else if (m_passed)
+			std::cout << "\nTest is already passed!.";
 		else
 		{
-			std::cout << "\nTest is already passed!.";
+			std::cout << "\nThere is nothing to pass!\nLoad the test first.";
 		}
 		return *this;
 	}
@@ -242,7 +249,7 @@ public:
 		return *this;
 	}
 
-	void Show()
+	void Show(bool admMd = false)
 	{
 		if (m_passed)
 		{
@@ -250,7 +257,7 @@ public:
 			for (size_t i = 0; i < qstCount; i++)
 			{
 				std::cout << "\nQuestion " << i + 1 << "/" << qstCount << ": ";
-				m_questions[i].Show(m_adminMode);
+				m_questions[i].Show(admMd);
 			}
 		}
 		else
@@ -258,6 +265,16 @@ public:
 			std::cout << "\nTest is not passed yet!";
 		}
 		
+	}
+
+	bool Empty()
+	{
+		return m_questions.empty();
+	}
+
+	bool Passed()
+	{
+		return m_passed;
 	}
 };
 

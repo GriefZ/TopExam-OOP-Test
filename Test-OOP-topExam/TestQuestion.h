@@ -67,7 +67,7 @@ public:
 			if (teacherMode)
 			{
 
-				if (ci < m_crctAnsw.size() && i == m_crctAnsw[ci])//Error!!!
+				if (ci < m_crctAnsw.size() && i == m_crctAnsw[ci])
 				{
 					std::cout << "Correct";
 					ci++;
