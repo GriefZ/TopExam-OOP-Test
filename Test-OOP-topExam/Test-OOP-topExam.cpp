@@ -106,7 +106,7 @@ int main()
 					case 1:
 					{
 						std::string fn;
-						std::cout << "Enter filename -> ";
+						std::cout << "\n\tEnter filename -> ";
 						std::getline(std::cin, fn);
 						tst.ReadFromFile(fn);
 						system("pause");
@@ -122,7 +122,7 @@ int main()
 					case 4:
 					{
 						std::string fn;
-						std::cout << "Enter filename -> ";
+						std::cout << "\n\tEnter filename -> ";
 						std::getline(std::cin, fn);
 						tst.ReadFromFile(fn);
 						system("pause");
